@@ -5,6 +5,7 @@
         <DisplayName>Visual Basic and C# Outliner</DisplayName>
         <Description xml:space="preserve">This extension makes the IF, ELSE, ELSEIF, WHILE and other blocks
 collapsible in Visual Basic .NET and C#.</Description>
+        <Icon>vsoutliner.png</Icon>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,)" />

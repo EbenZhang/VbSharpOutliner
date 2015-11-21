@@ -87,6 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="index.html" />
+    <Content Include="vsoutliner.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <None Include="LICENSE" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
