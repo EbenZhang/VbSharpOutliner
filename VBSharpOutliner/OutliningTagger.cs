@@ -205,13 +205,20 @@ namespace VBSharpOutliner
 
         private List<TagSpan<IOutliningRegionTag>> GetOutlineSpans(ITextSnapshot textSnapshot)
         {
-            var docs = textSnapshot.GetRelatedDocumentsWithChanges();
-            var doc = docs.First();
-            var tree = doc.GetSyntaxTreeAsync().Result;
-            var walker = new SytaxWalkerForOutlining(textSnapshot, _ideServices, 
-                _cancellationTokenSource.Token);
-            walker.Visit(tree.GetRoot());
-            return walker.OutlineSpans;
+            try
+            {
+                var docs = textSnapshot.GetRelatedDocumentsWithChanges();
+                var doc = docs.First();
+                var tree = doc.GetSyntaxTreeAsync(_cancellationTokenSource.Token).Result;
+                var walker = new SytaxWalkerForOutlining(textSnapshot, _ideServices,
+                    _cancellationTokenSource.Token);
+                walker.Visit(tree.GetRoot());
+                return walker.OutlineSpans;
+            }
+            catch (OperationCanceledException)
+            {
+                return new List<TagSpan<IOutliningRegionTag>>();
+            }
         }
 
         #region IDisposable Members
