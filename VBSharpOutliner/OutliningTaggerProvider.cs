@@ -34,8 +34,7 @@ namespace VBSharpOutliner
             //no outlining for projection buffers
             if (buffer is IProjectionBuffer) return null;
 
-            return buffer.Properties.GetOrCreateSingletonProperty(
-                () => new OutliningTagger(buffer, _ideServices) as ITagger<T>);
+            return new OutliningTagger(buffer, _ideServices) as ITagger<T>;
         }
     }
 }
