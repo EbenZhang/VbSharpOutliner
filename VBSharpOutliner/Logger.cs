@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 
 namespace VBSharpOutliner
@@ -27,6 +28,7 @@ namespace VBSharpOutliner
                     sw.WriteLine(ex.ToString());
                 }
             }
+            Debug.Assert(false, "Exception");
         }
     }
 }

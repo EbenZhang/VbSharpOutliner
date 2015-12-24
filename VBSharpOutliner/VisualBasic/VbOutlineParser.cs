@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.CodeAnalysis;
@@ -79,10 +80,7 @@ namespace VBSharpOutliner.VisualBasic
                 }
             }
 
-            var hint = CollapsedHintCreator.GetHint(
-                new SnapshotSpan(textSnapshot,
-                    node.FullSpan.Start, node.FullSpan.Length)
-                    , ideServices);
+            var hint = GetCodeHint(textSnapshot, ideServices, node.FullSpan.Start, node.FullSpan.Length);
 
             var span = new TagSpan<IOutliningRegionTag>(
                 new SnapshotSpan(textSnapshot, GetSpanStartPosition(node, text), GetSpanLength(node, text)),
@@ -90,6 +88,26 @@ namespace VBSharpOutliner.VisualBasic
                     collapsedForm: "...", collapsedHintForm: hint));
             ret.Add(span);
             return ret;
+        }
+
+        private static object GetCodeHint(ITextSnapshot textSnapshot, IdeServices ideServices,
+            int start, int len)
+        {
+            object hint;
+            try
+            {
+                hint = CollapsedHintCreator.GetHint(
+                    new SnapshotSpan(textSnapshot,
+                        start, len)
+                    , ideServices);
+            }
+            catch (Exception ex)
+            {
+                hint = @"unable to generate hint, please see log (%appdata%\Roaming\nicologies\vbsharpoutliner.log) for details";
+                var srcCode = textSnapshot.GetText(start, Math.Min(len, textSnapshot.Length - start));
+                Logger.WriteLog(ex, srcCode);
+            }
+            return hint;
         }
 
         private static TagSpan<IOutliningRegionTag> AddAdditionalOutlinerForIfStatement(SyntaxNode node, 
@@ -104,10 +122,8 @@ namespace VBSharpOutliner.VisualBasic
             }
             var start = multiLineIf.Statements.Span.Start;
             var len = multiLineIf.Statements.Span.Length;
-            var hint = CollapsedHintCreator.GetHint(
-                new SnapshotSpan(textSnapshot, 
-                    multiLineIf.Statements.FullSpan.Start, multiLineIf.Statements.FullSpan.Length)
-                    , ideServices);
+            var hint = GetCodeHint(textSnapshot, ideServices, multiLineIf.Statements.FullSpan.Start,
+                multiLineIf.Statements.FullSpan.Length);
 
             var span = new TagSpan<IOutliningRegionTag>(
                 new SnapshotSpan(textSnapshot, start, len),
