@@ -12,8 +12,8 @@ namespace VBSharpOutliner.CSharp.Outliners
         {
             var ret = new List<TagSpan<IOutliningRegionTag>>();
             var text = node.Parent.GetText();
-            var isOnlineBlock = text.Lines.Count <= 2;
-            if (isOnlineBlock)
+            var isOneLineBlock = text.Lines.Count <= 2;
+            if (isOneLineBlock)
             {
                 return ret;
             }
