@@ -23,6 +23,10 @@ namespace VBSharpOutliner.CSharp
 
         private static bool IsBlock(SyntaxNode node)
         {
+            if (node.Parent != null && node.Parent.IsKind(SyntaxKind.MethodDeclaration))
+            {
+                return false;
+            }
             if (node.IsKind(SyntaxKind.Block))
             {
                 return true;
@@ -31,11 +35,7 @@ namespace VBSharpOutliner.CSharp
             {
                 return true;
             }
-            if (node.IsKind(SyntaxKind.CollectionInitializerExpression))
-            {
-                return true;
-            }
-            return false;
+            return node.IsKind(SyntaxKind.CollectionInitializerExpression);
         }
 
         private ISharpOutliner GetOutliner(SyntaxNode node)
