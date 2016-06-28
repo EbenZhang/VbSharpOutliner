@@ -23,9 +23,16 @@ namespace VBSharpOutliner.CSharp
 
         private static bool IsBlock(SyntaxNode node)
         {
-            if (node.Parent != null && node.Parent.IsKind(SyntaxKind.MethodDeclaration))
+            if (node.Parent != null)
             {
-                return false;
+                if (node.Parent.IsKind(SyntaxKind.MethodDeclaration))
+                {
+                    return false;
+                }
+                if (node.Parent.IsKind(SyntaxKind.ConstructorDeclaration))
+                {
+                    return false;
+                }
             }
             if (node.IsKind(SyntaxKind.Block))
             {
